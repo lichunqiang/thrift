@@ -117,8 +117,8 @@ class ThriftClassLoader
      */
     protected function findFileInApc($class)
     {
-        if (false === $file = apc_fetch($this->apc_prefix.$class)) {
-            apc_store($this->apc_prefix.$class, $file = $this->findFile($class));
+        if (false === $file = apcu_fetch($this->apc_prefix.$class)) {
+            apcu_store($this->apc_prefix.$class, $file = $this->findFile($class));
         }
 
         return $file;

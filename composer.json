@@ -1,5 +1,5 @@
 {
-  "name":              "packaged/thrift",
+  "name":              "light/thrift",
   "description":       "Apache Thrift",
   "keywords":          ["thrift", "apache"],
   "homepage":          "http://thrift.apache.org/",
@@ -9,8 +9,8 @@
     "php": ">=5.0.0"
   },
   "autoload":          {
-    "psr-0": {
-      "Thrift\\": "src/"
+    "psr-4": {
+      "Thrift\\": "src/Thrift/"
     }
   }
 }

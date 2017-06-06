@@ -30,9 +30,9 @@ use Thrift\Exception\TException;
  * installed, then these null functions will step in and act like cache
  * misses.
  */
-if (!function_exists('apc_fetch')) {
-  function apc_fetch($key) { return FALSE; }
-  function apc_store($key, $var, $ttl=0) { return FALSE; }
+if (!function_exists('apcu_fetch')) {
+  function apcu_fetch($key) { return FALSE; }
+  function apcu_store($key, $var, $ttl=0) { return FALSE; }
 }
 
 /**
@@ -198,7 +198,7 @@ class TSocketPool extends TSocket
       $failtimeKey = 'thrift_failtime:'.$host.':'.$port.'~';
 
       // Cache miss? Assume it's OK
-      $lastFailtime = apc_fetch($failtimeKey);
+      $lastFailtime = apcu_fetch($failtimeKey);
       if ($lastFailtime === FALSE) {
         $lastFailtime = 0;
       }
@@ -242,7 +242,7 @@ class TSocketPool extends TSocket
 
             // Only clear the failure counts if required to do so
             if ($lastFailtime > 0) {
-              apc_store($failtimeKey, 0);
+              apcu_store($failtimeKey, 0);
             }
 
             // Successful connection, return now
@@ -257,7 +257,7 @@ class TSocketPool extends TSocket
         $consecfailsKey = 'thrift_consecfails:'.$host.':'.$port.'~';
 
         // Ignore cache misses
-        $consecfails = apc_fetch($consecfailsKey);
+        $consecfails = apcu_fetch($consecfailsKey);
         if ($consecfails === FALSE) {
           $consecfails = 0;
         }
@@ -274,12 +274,12 @@ class TSocketPool extends TSocket
                            'after '.$consecfails.' failed attempts.');
           }
           // Store the failure time
-          apc_store($failtimeKey, time());
+          apcu_store($failtimeKey, time());
 
           // Clear the count of consecutive failures
-          apc_store($consecfailsKey, 0);
+          apcu_store($consecfailsKey, 0);
         } else {
-          apc_store($consecfailsKey, $consecfails);
+          apcu_store($consecfailsKey, $consecfails);
         }
       }
     }
